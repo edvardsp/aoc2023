@@ -1,8 +1,9 @@
+use std::collections::HashSet;
 use std::io::Read;
 
 #[derive(Debug)]
 struct Input {
-    lines: Vec<Vec<u8>>,
+    cards: Vec<ScratchCard>,
 }
 
 impl Input {
@@ -10,18 +11,73 @@ impl Input {
         let stdin = std::io::stdin();
         let mut input = String::new();
         stdin.lock().read_to_string(&mut input)?;
-        let lines = input.lines().map(|line| line.as_bytes().to_vec()).collect();
+        let cards = input.lines().map(ScratchCard::from).collect();
 
-        Ok(Self { lines })
+        Ok(Self { cards })
+    }
+}
+
+#[derive(Clone, Debug)]
+struct ScratchCard {
+    winning_numbers: HashSet<usize>,
+    numbers: HashSet<usize>,
+}
+
+impl From<&str> for ScratchCard {
+    fn from(s: &str) -> Self {
+        let (_card, s) = s.split_once(':').unwrap();
+        let (winning_numbers, numbers) = s.split_once('|').unwrap();
+        let winning_numbers = winning_numbers
+            .split_whitespace()
+            .map(|s| s.parse().unwrap())
+            .collect();
+        let numbers = numbers
+            .split_whitespace()
+            .map(|n| n.parse().unwrap())
+            .collect();
+        Self {
+            winning_numbers,
+            numbers,
+        }
+    }
+}
+
+impl ScratchCard {
+    fn winnings(&self) -> usize {
+        self.winning_numbers.intersection(&self.numbers).count()
+    }
+
+    fn worth(&self) -> usize {
+        match self.winnings() {
+            0 => 0,
+            n => 2usize.pow((n - 1) as u32),
+        }
     }
 }
 
 fn part1(input: &Input) -> usize {
-    unimplemented!("part1")
+    input.cards.iter().map(ScratchCard::worth).sum()
 }
 
 fn part2(input: &Input) -> usize {
-    unimplemented!("part2")
+    let total_cards = input.cards.len();
+    input
+        .cards
+        .iter()
+        .enumerate()
+        .map(|(i, card)| {
+            let winnings = card.winnings();
+            let start = (i + 1).min(total_cards);
+            let end = (start + winnings).min(total_cards);
+            (i, start..end)
+        })
+        .fold(vec![1; total_cards], |mut pocket, (i, range)| {
+            let amount = pocket[i];
+            pocket[range].iter_mut().for_each(|n| *n += amount);
+            pocket
+        })
+        .iter()
+        .sum()
 }
 
 fn main() {
