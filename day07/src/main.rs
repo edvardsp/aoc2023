@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fs::File;
 use std::io::Read;
 
 #[derive(Debug)]
@@ -8,9 +9,9 @@ struct Input {
 
 impl Input {
     fn parse() -> Result<Self, Box<dyn std::error::Error>> {
-        let stdin = std::io::stdin();
+        let mut file = File::open("input.txt")?;
         let mut input = String::new();
-        stdin.lock().read_to_string(&mut input)?;
+        file.read_to_string(&mut input)?;
         let hands = input.lines().map(Hand::from).collect();
 
         Ok(Self { hands })
@@ -104,9 +105,9 @@ impl Hand {
         };
 
         Self {
+            hand_type,
             cards,
             bid,
-            hand_type,
         }
     }
 

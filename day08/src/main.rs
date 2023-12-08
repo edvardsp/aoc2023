@@ -9,9 +9,9 @@ struct Input {
 
 impl Input {
     fn parse() -> Result<Self, Box<dyn std::error::Error>> {
-        let stdin = std::io::stdin();
+        let mut file = std::fs::File::open("input.txt")?;
         let mut input = String::new();
-        stdin.lock().read_to_string(&mut input)?;
+        file.read_to_string(&mut input)?;
         let mut lines = input.lines();
         let directions = lines
             .next()

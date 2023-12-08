@@ -18,9 +18,9 @@ struct Input {
 
 impl Input {
     fn parse() -> Result<Self, Error> {
-        let stdin = std::io::stdin();
+        let mut file = std::fs::File::open("input.txt")?;
         let mut input = String::new();
-        stdin.lock().read_to_string(&mut input)?;
+        file.read_to_string(&mut input)?;
         let games = input
             .lines()
             .map(Game::try_from)
