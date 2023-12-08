@@ -4,16 +4,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'advent_of_code'",
+            "name": "Debug day",
             "cargo": {
-                "args": ["build", "--bin=day07"],
+                "args": ["build"],
                 "filter": {
-                    "name": "day07",
+                    "name": "aoc2023",
                     "kind": "bin"
                 }
             },
-            "args": [],
-            "cwd": "${workspaceFolder}/day07"
+            "args": ["${input:day}"],
+            "cwd": "${workspaceFolder}"
         }
     ],
     "inputs": [
