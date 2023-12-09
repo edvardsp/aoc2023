@@ -64,7 +64,7 @@ pub fn part1(input: &Input) -> usize {
     let mut symbols = HashSet::new();
     for (y, row) in input.map.iter().enumerate() {
         for (x, &symbol) in row.iter().enumerate() {
-            if symbol != b'.' && !(symbol >= b'0' && symbol <= b'9') {
+            if symbol != b'.' && symbol.is_ascii_digit() {
                 symbols.insert((y, x));
             }
         }

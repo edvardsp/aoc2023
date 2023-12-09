@@ -25,7 +25,7 @@ macro_rules! aoc_impl {
         $(mod $day;)*
 
         fn run_day(day: usize) {
-            assert!(1 <= day && day <= 25);
+            assert!((1..=25).contains(&day));
             match format!("day{:02}", day).as_ref() {
                 $(
                     stringify!($day) => {

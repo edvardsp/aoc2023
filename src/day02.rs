@@ -53,7 +53,7 @@ impl From<&str> for Cubes {
     fn from(s: &str) -> Self {
         let mut cube = Cubes::default();
         for ncolor in s.split(", ") {
-            let (n, color) = ncolor.split_once(" ").unwrap();
+            let (n, color) = ncolor.split_once(' ').unwrap();
             let n = n.parse().unwrap();
             match color {
                 "red" => cube.red = n,
